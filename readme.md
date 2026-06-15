@@ -36,6 +36,22 @@
 
 ## 2. Создание `.env`
 
+.env
+
+```
+DJANGO_SECRET_KEY=dev-local-insecure-key-change-me-please-0123456789
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+
+POSTGRES_DB=team_finder
+POSTGRES_USER=team_finder
+POSTGRES_PASSWORD=team_finder
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+
+TASK_VERSION=3
+```
+
 Файл `.env` содержит конфиденциальные настройки проекта — ключ Django, параметры БД и другие переменные.  
 
 Особое внимание обратите на строчку `TASK_VERSION=`. 
@@ -105,3 +121,21 @@ python manage.py runserver
 Осталось всего ничего: реализовать весь проект!
 
 Если в процессе разработки способ развертывания приложения поменяется, обновите `readme.md` с пометкой ревьюеру, как запускать и проверять приложение.
+
+---
+
+## 5. Тестовые аккаунты
+
+Для проверки функционала база наполнена тестовыми данными: **7 пользователей** (1 суперпользователь + 6 обычных) и **24 проекта** (2 страницы пагинации по 12), с навыками, участниками и разными статусами. У всех пользователей автоматически сгенерированы аватары.
+
+| Роль              | Email                     | Пароль        |
+|-------------------|---------------------------|---------------|
+| Суперпользователь | `admin@teamfinder.local`  | `admin12345`  |
+| Пользователь      | `ivan@example.com`        | `password123` |
+| Пользователь      | `anna@example.com`        | `password123` |
+| Пользователь      | `dmitry@example.com`      | `password123` |
+| Пользователь      | `maria@example.com`       | `password123` |
+| Пользователь      | `sergey@example.com`      | `password123` |
+| Пользователь      | `olga@example.com`        | `password123` |
+
+Суперпользователь имеет доступ к админ-панели по адресу [http://localhost:8000/admin/](http://localhost:8000/admin/).
