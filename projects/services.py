@@ -2,14 +2,13 @@ from projects.models import Project, Skill
 
 
 def create_project(*, owner, name, description="", github_url="", status=Project.Status.OPEN):
-    target_project = Project.objects.create(
+    return Project.objects.create(
         owner=owner,
         name=name,
         description=description,
         github_url=github_url,
         status=status,
     )
-    return target_project
 
 
 def update_project(*, target_project, name, description, github_url, status):
@@ -17,9 +16,7 @@ def update_project(*, target_project, name, description, github_url, status):
     target_project.description = description
     target_project.github_url = github_url
     target_project.status = status
-    target_project.save(
-        update_fields=["name", "description", "github_url", "status"]
-    )
+    target_project.save(update_fields=["name", "description", "github_url", "status"])
     return target_project
 
 

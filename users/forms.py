@@ -36,7 +36,6 @@ class LoginForm(_StyledFormMixin, forms.Form):
 
 class EditProfileForm(_StyledFormMixin, forms.ModelForm):
 
-
     phone = forms.CharField(label="Телефон", required=False)
 
     class Meta:

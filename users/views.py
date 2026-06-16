@@ -9,12 +9,10 @@ from users.forms import EditProfileForm, LoginForm, RegisterForm
 from users.models import User
 from utils.pagination import paginate
 
-PROJECTS_LIST_URL = "/projects/list/"
-
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect(PROJECTS_LIST_URL)
+        return redirect("projects:list")
 
     frm = RegisterForm(request.POST or None)
 
@@ -25,12 +23,12 @@ def register(request):
         return render(request, "users/register.html", {"form": frm})
 
     user_services.register_user(**frm.cleaned_data)
-    return redirect("/users/login/")
+    return redirect("users:login")
 
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect(PROJECTS_LIST_URL)
+        return redirect("projects:list")
 
     frm = LoginForm(request.POST or None)
 
@@ -50,13 +48,13 @@ def login_view(request):
         return render(request, "users/login.html", {"form": frm})
 
     login(request, target_user)
-    return redirect(PROJECTS_LIST_URL)
+    return redirect("projects:list")
 
 
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect(PROJECTS_LIST_URL)
+    return redirect("projects:list")
 
 
 def participants_list(request):
@@ -94,7 +92,7 @@ def edit_profile(request):
         return render(request, "users/edit_profile.html", {"form": frm, "user": request.user})
 
     user_services.update_profile(target_user=request.user, **frm.cleaned_data)
-    return redirect(f"/users/{request.user.id}/")
+    return redirect("users:detail", pk=request.user.id)
 
 
 @login_required
@@ -109,4 +107,4 @@ def change_password(request):
 
     target_user = frm.save()
     update_session_auth_hash(request, target_user)
-    return redirect(f"/users/{request.user.id}/")
+    return redirect("users:detail", pk=request.user.id)

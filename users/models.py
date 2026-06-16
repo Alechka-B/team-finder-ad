@@ -31,7 +31,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
 
-
     phone = models.CharField(
         "Телефон",
         max_length=PHONE_MAX_LENGTH,

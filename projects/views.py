@@ -1,4 +1,3 @@
-import json
 from http import HTTPStatus
 
 from django.contrib.auth.decorators import login_required
@@ -12,6 +11,7 @@ from projects.forms import ProjectForm
 from projects.models import Project, Skill
 from utils.decorators import ajax_login_required, require_author
 from utils.pagination import paginate
+from utils.parsers import parse_json_body
 
 
 def project_list(request):
@@ -33,9 +33,7 @@ def project_list(request):
 
 
 def project_detail(request, pk):
-    target_project = (
-        Project.objects.with_full_details().filter(pk=pk).first()
-    )
+    target_project = Project.objects.with_full_details().filter(pk=pk).first()
     if target_project is None:
         raise Http404("Проект не найден.")
 
@@ -56,7 +54,7 @@ def project_create(request):
         owner=request.user,
         **frm.cleaned_data,
     )
-    return redirect(f"/projects/{target_project.id}/")
+    return redirect("projects:detail", pk=target_project.id)
 
 
 @login_required
@@ -71,7 +69,7 @@ def project_edit(request, pk, target_project):
         return render(request, "projects/create-project.html", {"form": frm, "is_edit": True})
 
     project_services.update_project(target_project=target_project, **frm.cleaned_data)
-    return redirect(f"/projects/{target_project.id}/")
+    return redirect("projects:detail", pk=target_project.id)
 
 
 @require_POST
@@ -107,18 +105,11 @@ def skills_search(request):
     return JsonResponse(data, safe=False)
 
 
-def _parse_json_body(request):
-    try:
-        return json.loads(request.body or b"{}")
-    except (ValueError, TypeError):
-        return {}
-
-
 @require_POST
 @ajax_login_required
 @require_author
 def project_skill_add(request, pk, target_project):
-    payload = _parse_json_body(request)
+    payload = parse_json_body(request)
 
     target_skill = project_services.add_skill_to_project(
         target_project=target_project,

@@ -22,9 +22,7 @@ def ajax_login_required(view_func):
 def require_author(view_func):
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
-        target_project = (
-            Project.objects.with_full_details().filter(pk=kwargs.get("pk")).first()
-        )
+        target_project = Project.objects.with_full_details().filter(pk=kwargs.get("pk")).first()
         if target_project is None:
             raise Http404("Проект не найден.")
 
